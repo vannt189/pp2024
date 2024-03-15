@@ -150,6 +150,10 @@ class SchoolManagement(Course,Student):
         f = open("students.dat", "ab")
         pickle.dump(marksheet,f)
         f.close() 
+    
+    def zipFile(self):
+        with zipfile.ZipFile("studentsData.zip","w") as zip_file:
+            zip_file.write("students.dat")
 
 def main():
     sm = SchoolManagement()
@@ -164,7 +168,8 @@ def main():
     6. List student mark for a course
     7. Calculate GPA
     8. Create marksheet(student.dat) file
-    9. Exit
+    9. Zip the file
+    10. Exit
               """)
         choice = int(input("Enter your choice: "))
         if choice == 1:
@@ -212,6 +217,10 @@ def main():
             print("MarkSheet has been created")
 
         elif choice == 9:
+            sm.zipFile()
+            print("File has been zipped")
+
+        elif choice == 10:
             print("Exit program!")
             break
 
