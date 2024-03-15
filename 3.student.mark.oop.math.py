@@ -1,22 +1,5 @@
-import json
 import math
 
-f = open("student.info.txt")
-student_info = []
-for line in f.readlines():
-    data = line.split()
-    student_info.append(data)
-f.close()
-
-g = open("course.info.txt")
-course_info = []
-for line in g.readlines():
-    data = line.split()
-    course_info.append(data)
-g.close()
-
-m = open("mark.json")
-mark_info = json.load(m)
 
 class info: 
     def __init__(self,id,name):
@@ -73,30 +56,17 @@ class SchoolManagement(Course,Student):
         self.courses = []
         self.marks = {}
 
-    # def autoFillInfoFromFile(self,student_info,course_info,mark_info){
-    #     for i in student_info:
-    #         student = Student(i[0],i[1],i[2])
-    #         self.students.append(student)
-    #     for i in course_info:
-    #         course = Course(i[0],i[1],i[2])
-    #         self.courses.append(course)
-    #     self.marks = mark_info
-    # }
     
     def input_student(self):
-        # n = int(input("Enter number of students:"))
-        # for i in range(n):
-        #     print(f"Enter the student {i+1} information:")
-        #     id = input("Student ID:")
-        #     name = input("Student Name:")
-        #     dob = input("DOB:")
-        #     #create a student obj to collect all information
-        #     student = Student(id,name,dob)
-        #     # append student to the list
-        #     self.students.append(student)  
-
-        for i in student_info:
-            student = Student(i[0],i[1],i[2])
+        n = int(input("Enter number of students:"))
+        for i in range(n):
+            print(f"Enter the student {i+1} information:")
+            id = input("Student ID:")
+            name = input("Student Name:")
+            dob = input("DOB:")
+            #create a student obj to collect all information
+            student = Student(id,name,dob)
+            # append student to the list
             self.students.append(student)
 
     
@@ -107,19 +77,14 @@ class SchoolManagement(Course,Student):
             print(f"Student ID: {student.getID()}, Student Name: {student.getName()}, DOB: {student.getDOB()}")
     
     def input_course(self):
-        # n = int(input("Enter number of courses:"))
-        # for i in range(n):
-        #     print(f"Input information of course {i+ 1}:")
-        #     id = input("Course ID:")
-        #     name = input("Course Name:")
-        #     credit = input("Credit:")
-        #     course = Course(id,name,credit)
-        #     self.courses.append(course)
-        for i in course_info:
-            course = Course(i[0],i[1],i[2])
+        n = int(input("Enter number of courses:"))
+        for i in range(n):
+            print(f"Input information of course {i+ 1}:")
+            id = input("Course ID:")
+            name = input("Course Name:")
+            credit = input("Credit:")
+            course = Course(id,name,credit)
             self.courses.append(course)
-
-        # print(course_info)    
     
     def list_courses(self):
         # print(course_info)
@@ -135,14 +100,7 @@ class SchoolManagement(Course,Student):
             student_marks[student.getID()] = mark
         self.marks[course_id] = student_marks
 
-
-        # for i in mark_info[course_id]:
-        #     student_marks[i] = mark_info[course_id][i]
-        #     self.marks[course_id] = student_marks
-
-        # self.marks = mark_info
-
-    
+        
     def list_student_marks(self,course_id):
         print(f"Mark for course {course_id}:")
         for student_id,mark in self.marks[course_id].items():
@@ -166,9 +124,6 @@ class SchoolManagement(Course,Student):
                     total_credit += self.getCreditfromCourseID(course_id)
         return math.floor((total_score/total_credit)*10)/10
 
-        
-
-        
 
 def main():
     sm = SchoolManagement()
@@ -198,8 +153,6 @@ def main():
                     print("Course not found!")
                     break
             sm.input_student_marks(course_id)
-            # sm.input_student_marks()
-            # print(sm.marks)
 
         elif choice == 4:
             lenCourse = len(sm.courses)
@@ -224,7 +177,6 @@ def main():
         elif choice == 7:
             student_id = input("Enter student ID:")
             print(f"GPA of student {student_id}: {sm.calculate_gpa(student_id):.2f}")
-            
 
         elif choice == 8:
             print("Exit program!")
@@ -237,5 +189,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
+    

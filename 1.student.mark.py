@@ -1,97 +1,59 @@
 #Input function
-
-#input number of students
-def setNumberOfStudent():
-    num = int(input("Enter number of students: "))
-    if (num < 0):
-        print("Invalid number. Enter again!")
-        return setNumberOfStudent()
-    else:
-        return num
-    
-
-#input student information
-
-def setStudentInfo():
-    SId = input("Enter student's ID: ")
-    SName = input("Enter student's name: ")
-    SDob = input("Enter student's D.O.B (dd/mm/yyyy): ")
-
-    return {"Student ID":SId,"Student name":SName,"D.O.B": SDob}
-    
+students = []
+courses = []
+marks = {}
 
 
-#input number of course
+def input_student_info():
+    n = int(input("Enter number of student:"))
+    for i in range(n):
+        student = {}
+        print(f"Enter student {i+1} information:")
+        student["id"] = input("Enter student's ID:")
+        student["name"] = input("Enter student's name:")
+        student["dob"] = input("Enter student's D.O.B (dd/mm/yyyy):")
+        students.append(student)
 
-def setNumberOfCourse():
-    num = int(input("Enter number of courses: "))
-    if (num < 0):
-        print("Invalid number. Enter again!")
-        return setNumberOfCourse()
-    else:
-        return num
-    
-#input course information:
-    
-def setCourseInfo():
-    CId = input("Enter course's ID: ")
-    CName = input("Enter course's name: ")
-    return {"Course ID":CId,"Course Name":CName }
+def input_course_info():
+    n = int(input("Enter number of course:"))
+    for i in range(n):
+        course = {}
+        course["id"] = input("Enter course's ID:")
+        course["name"] = input("Enter course's name:")
+        courses.append(course)
 
-#select a course, input marks for student in this course
+def input_mark(course_id):
+    student_marks = {}
+    for student in students:
+        mark = float(input(f"Enter mark for student {student["id"]} (Course ID: {course_id}):"))
 
-def setMarkCourse(course):
-    mark_dict = {}
+        #student id is used as key in student_marks dict 
+        student_marks[student["id"]] = mark
+    # explain this part
+    marks[course_id] = student_marks
 
-    for student in Info["Students"]:
-        while True:
-            try:
-                mark = round(float(input(f"Enter mark for student {student['Student ID']}, course {course['Course Name']}: ")), 2)
-                if mark < 0 or mark > 20:
-                    print("Invalid mark. Enter again!")
-                else:
-                    mark_dict[student['Student ID']] = mark
-                    break  
-            except ValueError:
-                print("Invalid input. Enter a valid mark!")
+def list_student():
+    for student in students:
+        print(f"Student ID: {student["id"]}, Student Name: {student["name"]},DOB: {student["dob"]}")
+def list_course():
+    for course in courses:
+        print(f"Course ID: {course["id"]} - Course Name: {course["name"]}")
 
-    course['Mark'] = mark_dict
+def list_mark(course_id):
+    if course_id not in marks:
+        print("Course not found!")
+        return
+    print(f"List of marks for course {course_id} :")
+    #iterate through dict store under the course_id key in marks dict
+    for student_id, mark in marks[course_id].items():
+        #items(): return the key-value pairs of dict, use when loop though key-value simultaneously
+        for student in students:
+            #check if the current student matches the student from mark dict
+            if student["id"] == student_id:
+                print(f"Student ID: {student["id"]}, Mark: {mark}")
+                break
 
-#Listing function 
-    
-#list students
 
-def listStudents():
-    print("List of students: ")
-    for student in Info["Students"]:
-        print(f"ID: {student['Student ID']}, Name: {student['Student name']}, D.O.B: {student['D.O.B']}")
-
-#list course
-        
-def listCourses():
-    print("List of courses: ")
-    for course in Info["Courses"]:
-        print(f"ID: {course['Course ID']}, Name: {course['Course Name']}")
-    
-#show student marks for a given course
-
-def listMark(courseID):
-    print(f"List of marks for course {courseID}: ")
-    for course in Info["Courses"]:
-        if course['Course ID'] == courseID:
-            for studentID in course['Mark']:
-                print(f"Student ID: {studentID}, Mark: {course['Mark'][studentID]}")
-        else:
-            print("Invalid course ID. Enter again!")
-            
-
-    
-Info = {
-    "Students": [],
-    "Courses": [],
-}
-
-#main function 
 
 def main():
 
@@ -100,50 +62,44 @@ def main():
     1. Input student information
     2. Input course information
     3. Input mark for course
-    4. List student
-    5. List course
-    6. List mark
+    4. List course
+    5. List student
+    6. List student mark for a course
     7. Exit
               """)
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            numOfStudent = setNumberOfStudent()
-            for i in range(numOfStudent):
-                student = setStudentInfo()
-                Info["Students"].append(student)
+        choice = int(input("Enter your choice: "))
+        if choice == 1:
+            input_student_info()
 
-        elif choice == "2":
-            numOfCourse = setNumberOfCourse()
-            for i in range(numOfCourse):
-                course = setCourseInfo()
-                setMarkCourse(course)
-                Info["Courses"].append(course)
+        elif choice == 2:
+            input_course_info()
 
-        elif choice == "3":
-            courseID = input("Enter course ID: ")
-            listMark(courseID)
+        elif choice == 3:
+            course_id = input("Enter course ID: ")
+            input_mark(course_id)
 
-        elif choice == "4":
-            lenStudent = len(Info["Students"])
-            if lenStudent == 0:
-                print("No student. Enter Students information first!")
-                continue
-            else:
-             listStudents()
-
-        elif choice == "5":
-            lenCourse = len(Info['Courses'])
+        elif choice == 4:
+            lenCourse = len(courses)
             if lenCourse == 0:
                 print("No Course. Enter Course infomation first!")
                 continue
             else:
-                listCourses()
+                list_course()
 
-        elif choice == "6":
-            courseID = input("Enter course ID: ")
-            listMark(courseID)
+        elif choice == 5:
+            lenStudent = len(students)
+            if lenStudent == 0:
+                print("No Student. Enter Student infomation first!")
+                continue
+            else:
+                list_student()
+
+        elif choice == 6:
+            course_id = input("Enter course ID: ")
+            list_mark(course_id)
 
         elif choice == "7":
+            print("Exit program!")
             break
 
         else:
